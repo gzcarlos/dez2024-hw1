@@ -60,3 +60,58 @@ dpage/pgadmin4
 jupyter nbconvert --to=script upload_data.ipynb
 ```
 
+## Homework Submission
+
+For homework #1 submission the queries for the green taxi trips related questions (Q's) are as follows
+
+#### Q3 - How many taxi trips were totally made on September 18th 2019?
+
+```sql
+select count(*) from green_trips_data a
+where a.lpep_pickup_datetime between '2019-09-18' and '2019-09-18 23:59:59'
+  and a.lpep_dropoff_datetime between '2019-09-18' and '2019-09-18 23:59:59'
+```
+
+#### Q4 - Which was the pick up day with the largest trip distance Use the pick up time for your calculations.
+
+```sql
+select 
+    date_trunc('day', a.lpep_pickup_datetime) lpep_pickup_datetime
+  , max(a.trip_distance) max_trip_distance
+from green_trips_data a
+group by date_trunc('day', a.lpep_pickup_datetime)
+order by max_trip_distance desc
+LIMIT 1 -- remote to see all the data
+```
+
+#### Q5 - Which were the 3 pick up Boroughs that had a sum of total_amount superior to 50000?
+
+```sql
+select  b."Borough", sum(a.total_amount) as sum_total_amount
+from green_trips_data a
+  join green_zones_data b
+    on a."PULocationID" = b."LocationID"
+where a.lpep_pickup_datetime between '2019-09-18' and '2019-09-18 23:59:59'
+  and b."Borough" != 'Unknown'
+group by b."Borough"
+having sum(a.total_amount) >= 50000
+order by sum_total_amount desc
+LIMIT 3 -- remote to see all the data
+```
+#### Q6 - For the passengers picked up in September 2019 in the zone name Astoria which was the drop off zone that had the largest tip?
+
+```sql
+select a.lpep_dropoff_datetime, doff."Zone", a.tip_amount
+from green_trips_data a
+  join green_zones_data doff
+    on a."DOLocationID" = doff."LocationID"
+  join green_zones_data pup
+    on a."PULocationID" = pup."LocationID"
+where 
+  -- filters for pickup
+      a.lpep_pickup_datetime between '2019-09-01 00:00:00' and '2019-09-30 23:59:59'
+  and pup."Zone" = 'Astoria'
+order by a.tip_amount desc
+LIMIT 1 -- remove to see all the data
+```
+
