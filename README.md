@@ -115,3 +115,32 @@ order by a.tip_amount desc
 LIMIT 1 -- remove to see all the data
 ```
 
+#### Q7 - Creating Resources
+
+Perform this commands in the exact order
+
+```bash
+# Refresh service-account's auth-token for this session
+gcloud auth application-default login
+
+# Initialize state file (.tfstate)
+terraform init
+
+# Check changes to new infra plan
+terraform plan -var="project=dez-2024"
+```
+
+Then execute the `apply` and this whole output paste it in the Question 7 input field
+
+```bash
+# Create new infra
+terraform apply -var="project=dez-2024"
+```
+
+Finally execute the `destroy`
+
+```bash
+# Delete infra after your work, to avoid costs on any running services
+terraform destroy
+```
+
