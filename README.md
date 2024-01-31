@@ -143,4 +143,10 @@ Finally execute the `destroy`
 # Delete infra after your work, to avoid costs on any running services
 terraform destroy
 ```
+##### At the end of the executions 
 
+Delete this file in order to logout from `Google Cloud`
+
+```bash
+rm ~/.config/gcloud/application_default_credentials.json
+```
